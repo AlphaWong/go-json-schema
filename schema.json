@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "properties": {
+    "balance": {
+      "default": 0.0, 
+      "type": "number"
+    }, 
+    "gender": {
+      "default": "Missing", 
+      "pattern": "^(fe)?(male)$",
+      "type": "string"
+    }, 
+    "name": {
+      "default": "Missing", 
+      "type": "string"
+    }
+  }, 
+  "required": [
+    "gender", 
+    "balance", 
+    "name"
+  ], 
+  "type": "object"
+}
