@@ -24,8 +24,21 @@ func main() {
 	}
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(tmpUser)
-	schemaLoader := gojsonschema.NewReferenceLoader("file:///home/ubuntu/workspace/src/schema.json")
-	subject := gojsonschema.NewStringLoader(string(b.Bytes()))
+	IsValidJSON(string(b.Bytes()), "file:///home/ubuntu/workspace/schema.json")
+
+	tmpUser = User{
+		Name:    "alpha",
+		Gender:  "ET",
+		Balance: 3.14,
+	}
+	b = new(bytes.Buffer)
+	json.NewEncoder(b).Encode(tmpUser)
+	IsValidJSON(string(b.Bytes()), "file:///home/ubuntu/workspace/schema.json")
+}
+
+func IsValidJSON(s string, path string) {
+	schemaLoader := gojsonschema.NewReferenceLoader(path)
+	subject := gojsonschema.NewStringLoader(s)
 	result, err := gojsonschema.Validate(schemaLoader, subject)
 	if err != nil {
 		panic(err.Error())
@@ -33,12 +46,14 @@ func main() {
 
 	if result.Valid() {
 		fmt.Printf("The document is valid\n")
-	} else {
-		fmt.Printf("The document is not valid. see errors :\n")
-		for _, desc := range result.Errors() {
-			fmt.Printf("- %s\n", desc)
-		}
+		return
 	}
+
+	fmt.Printf("The document is not valid. see errors :\n")
+	for _, desc := range result.Errors() {
+		fmt.Printf("- %s\n", desc)
+	}
+
 }
 
 func getCWD() string {
