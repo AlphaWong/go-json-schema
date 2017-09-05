@@ -7,6 +7,13 @@ go get
 go run ./main.go
 ```
 
+# Result
+```sh
+The document is valid
+The document is not valid. see errors :
+- gender: Does not match pattern '^(fe)?(male)$'
+```
+
 # Tools
 1. https://jsonschema.net/#/editor
 1. http://json-schema.org/example1.html
