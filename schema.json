@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "properties": {
     "balance": {
-      "default": 0.0, 
+      "default": 9.81, 
       "type": "number"
     }, 
     "gender": {

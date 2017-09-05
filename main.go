@@ -17,6 +17,9 @@ type User struct {
 }
 
 func main() {
+	schemaLoader := gojsonschema.NewReferenceLoader("file:///home/ubuntu/workspace/schema.json")
+	schema, _ := gojsonschema.NewSchema(schemaLoader)
+
 	tmpUser := User{
 		Name:    "alpha",
 		Gender:  "male",
@@ -24,7 +27,8 @@ func main() {
 	}
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(tmpUser)
-	IsValidJSON(string(b.Bytes()), "file:///home/ubuntu/workspace/schema.json")
+
+	IsValidJSON(string(b.Bytes()), schema)
 
 	tmpUser = User{
 		Name:    "alpha",
@@ -33,13 +37,22 @@ func main() {
 	}
 	b = new(bytes.Buffer)
 	json.NewEncoder(b).Encode(tmpUser)
-	IsValidJSON(string(b.Bytes()), "file:///home/ubuntu/workspace/schema.json")
+	IsValidJSON(string(b.Bytes()), schema)
+
+	tmpUser = User{
+		Name:   "alpha",
+		Gender: "male",
+	}
+	b = new(bytes.Buffer)
+	json.NewEncoder(b).Encode(tmpUser)
+	fmt.Println(b)
+	IsValidJSON(string(b.Bytes()), schema)
+
 }
 
-func IsValidJSON(s string, path string) {
-	schemaLoader := gojsonschema.NewReferenceLoader(path)
+func IsValidJSON(s string, schema *gojsonschema.Schema) {
 	subject := gojsonschema.NewStringLoader(s)
-	result, err := gojsonschema.Validate(schemaLoader, subject)
+	result, err := schema.Validate(subject)
 	if err != nil {
 		panic(err.Error())
 	}
