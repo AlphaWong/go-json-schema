@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "gender": {
+            "default": "Missing",
+            "pattern": "^(fe)?(male)$",
+            "type": "string"
+        },
+        "name": {
+            "default": "Missing",
+            "type": "string"
+        }
+    },
+    "properties": {
+      "gender": { "$ref": "#/definitions/gender"},
+      "name": { "$ref": "#/definitions/name"}
+    },
+    "required": [
+        "gender",
+        "name"
+    ],
+    "type": "object"
+}

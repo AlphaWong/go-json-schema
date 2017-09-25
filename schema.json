@@ -1,24 +1,20 @@
 {
-  "$schema": "http://json-schema.org/draft-04/schema#",
-  "properties": {
-    "balance": {
-      "default": 9.81, 
-      "type": "number"
-    }, 
-    "gender": {
-      "default": "Missing", 
-      "pattern": "^(fe)?(male)$",
-      "type": "string"
-    }, 
-    "name": {
-      "default": "Missing", 
-      "type": "string"
-    }
-  }, 
-  "required": [
-    "gender", 
-    "balance", 
-    "name"
-  ], 
-  "type": "object"
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "balance": {
+            "default": 9.81,
+            "type": "number"
+        }
+    },
+    "properties": {
+      "balance": { "$ref": "#/definitions/balance"},
+      "gender": { "$ref": "user.json#/definitions/gender"},
+      "name": { "$ref": "user.json#/definitions/name"}
+    },
+    "required": [
+        "gender",
+        "balance",
+        "name"
+    ],
+    "type": "object"
 }
