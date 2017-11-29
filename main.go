@@ -16,7 +16,16 @@ type User struct {
 	Balance float32 `json:"balance"`
 }
 
+const SchemaPath = "schema.json"
+
+var simpleLoader gojsonschema.JSONLoader
+
+func init() {
+	simpleLoader = gojsonschema.NewReferenceLoader("file:///" + os.Getenv("GOPATH") + "/" + SchemaPath)
+}
+
 func main() {
+	// Test 1
 	tmpUser := User{
 		Name:    "alpha",
 		Gender:  "male",
@@ -24,8 +33,9 @@ func main() {
 	}
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(tmpUser)
-	IsValidJSON(string(b.Bytes()), "file:///home/ubuntu/workspace/schema.json")
+	IsValidJSON(string(b.Bytes()), simpleLoader)
 
+	// Test 2
 	tmpUser = User{
 		Name:    "alpha",
 		Gender:  "ET",
@@ -33,8 +43,9 @@ func main() {
 	}
 	b = new(bytes.Buffer)
 	json.NewEncoder(b).Encode(tmpUser)
-	IsValidJSON(string(b.Bytes()), "file:///home/ubuntu/workspace/schema.json")
+	IsValidJSON(string(b.Bytes()), simpleLoader)
 
+	// Test 3
 	tmpUser = User{
 		Name:   "alpha",
 		Gender: "male",
@@ -42,14 +53,13 @@ func main() {
 	b = new(bytes.Buffer)
 	json.NewEncoder(b).Encode(tmpUser)
 	fmt.Println()
-	IsValidJSON(string(b.Bytes()), "file:///home/ubuntu/workspace/schema.json")
+	IsValidJSON(string(b.Bytes()), simpleLoader)
 
 }
 
-func IsValidJSON(s string, path string) {
-	schemaLoader := gojsonschema.NewReferenceLoader(path)
+func IsValidJSON(s string, sl gojsonschema.JSONLoader) {
 	subject := gojsonschema.NewStringLoader(s)
-	result, err := gojsonschema.Validate(schemaLoader, subject)
+	result, err := gojsonschema.Validate(sl, subject)
 	if err != nil {
 		panic(err.Error())
 	}
